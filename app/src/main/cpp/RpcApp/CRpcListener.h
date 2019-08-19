@@ -5,7 +5,7 @@
 #ifndef RPCTUNER_CRPCLISTENER_H
 #define RPCTUNER_CRPCLISTENER_H
 
-#include "../RPC_GLOBAL.h"
+#include <RPC_GLOBAL.h>
 
 class CRpcListener {
 public:

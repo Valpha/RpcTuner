@@ -2,11 +2,10 @@
 // Created by Valpha on 2019/8/20.
 //
 
-#include "CTunerApp.h"
-#include "../RpcApp/CRpcApp.h"
-#include "../RPC_GLOBAL.h"
 
-#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, "CTunerApp", __VA_ARGS__)
+#include "CTunerApp.h"
+
+#define LOGD(...) LOGTAG("CTunerApp", __VA_ARGS__)
 
 pthread_mutex_t  CTunerApp::mutex = PTHREAD_MUTEX_INITIALIZER;
 CTunerApp *CTunerApp::pInstance = NULL;
@@ -79,13 +78,13 @@ RPC_ERRCODE CTunerApp::getInfo(uByte *info, uByte length) {
     return RPC_OK;
 }
 
-RPC_ERRCODE CTunerApp::registeTunerRPCLisiner(CTunerRPCLisiner *lisiner) {
-    tunerRpcLisiner = lisiner;
-    return CRpcApp::getInstance()->registerRpcLisener(lisiner);
+RPC_ERRCODE CTunerApp::registeTunerRPCLisiner(CTunerRpcListener *listener) {
+    tunerRpcListener = listener;
+    return CRpcApp::getInstance()->registerRpcLisener(listener);
 
 }
 
-void CTunerRPCLisiner::onReceivedInfo(uByte *pInfo, uByte length) {
+void CTunerRpcListener::onReceivedInfo(uByte *pInfo, uByte length) {
     LOGD("%d\n", length);
     for (int i = 0; i < length; i++) {
         LOGD("%X, ", pInfo[i]);
@@ -96,9 +95,29 @@ void CTunerRPCLisiner::onReceivedInfo(uByte *pInfo, uByte length) {
         LOGD("opcode %d\n", opcode);
         LOGD("pInfo[0] %d\n", pInfo[0]);
         if (pInfo[0] == 0x01) {
-            if (CTunerApp::getInstance()->tunerRpcLisiner != NULL) {
-                CTunerApp::getInstance()->tunerRpcLisiner->onDataChanged(pInfo, length);
+            if (CTunerApp::getInstance()->tunerRpcListener != NULL) {
+                CTunerApp::getInstance()->tunerRpcListener->onDataChanged(pInfo, length);
             }
         }
     }
+}
+
+pthread_mutex_t  CFMRadioRpcListener::mutex = PTHREAD_MUTEX_INITIALIZER;
+uByte CFMRadioRpcListener::rpcdata[RPC_CMD_LENGTH];
+bool CFMRadioRpcListener::rpcdataokflag = false;
+
+void CFMRadioRpcListener::onDataChanged(uByte *pInfo, uByte length) {
+    if (CFMRadioRpcListener::rpcdataokflag == false) {
+        for (uByte i = 0; i < length; i++) {
+            LOGD("%X ", pInfo[i]);
+            CFMRadioRpcListener::rpcdata[i] = pInfo[i];
+        }
+        CFMRadioRpcListener::rpcdataokflag = true;
+    }
+}
+
+CFMRadioRpcListener::CFMRadioRpcListener() {}
+
+CFMRadioRpcListener::~CFMRadioRpcListener() {
+
 }

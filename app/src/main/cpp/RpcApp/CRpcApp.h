@@ -6,10 +6,11 @@
 #define RPCTUNER_CRPCAPP_H
 
 #include    <vector>
+#include <RPC_GLOBAL.h>
 #include    "CRpcListener.h"
-#include    "../RPC_GLOBAL.h"
 #include    "ComProxy/CRpcComProxy.h"
-#include "CRpcProtocol.h"
+#include    "CRpcProtocol.h"
+
 class CRpcApp {
 public:
     static CRpcApp *getInstance(void);

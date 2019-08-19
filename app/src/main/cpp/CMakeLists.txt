@@ -10,24 +10,7 @@ cmake_minimum_required(VERSION 3.4.1)
 # You can define multiple libraries, and CMake builds them for you.
 # Gradle automatically packages shared libraries with your APK.
 
-file(GLOB_RECURSE RPCLIB "*.cpp")
-add_library( # Sets the name of the library.
-        rpc-lib
-
-        # Sets the library as a shared library.
-        SHARED
-
-        # Provides a relative path to your source file(s).
-        rpc-lib.cpp
-
-        RpcApp/ComProxy/ComWithDriver.cpp
-        RpcApp/ComProxy/UartDriver.cpp
-        RpcApp/ComProxy/CRpcComProxy.cpp
-
-        ${RPCLIB}
-        )
-
-
+include_directories("include")
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
 # default, you only need to specify the name of the public NDK library
@@ -41,14 +24,18 @@ find_library( # Sets the name of the path variable.
         # you want CMake to locate.
         log)
 
-# Specifies libraries CMake should link to your target library. You
-# can link multiple libraries, such as libraries you define in this
-# build script, prebuilt third-party libraries, or system libraries.
+file(GLOB_RECURSE RPCAPP "RpcApp/*.cpp")
+add_library(rpc-lib SHARED ${RPCAPP})
+target_link_libraries(rpc-lib ${log-lib})
 
 
-target_link_libraries( # Specifies the target library.
-        rpc-lib
+file(GLOB_RECURSE TUNERAPP "TunerApp/*.cpp")
+add_library(tuner-lib SHARED ${TUNERAPP})
+target_link_libraries(tuner-lib ${log-lib})
+target_link_libraries(tuner-lib rpc-lib)
 
-        # Links the target library to the log library
-        # included in the NDK.
-        ${log-lib})
+file(GLOB_RECURSE RPCJNI "RPCJNI/RPCJNI.cpp")
+add_library(RPCJNI STATIC ${RPCJNI})
+target_link_libraries(RPCJNI ${log-lib})
+
+target_link_libraries(RPCJNI tuner-lib)

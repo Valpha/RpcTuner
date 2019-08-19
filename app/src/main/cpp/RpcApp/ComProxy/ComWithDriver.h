@@ -5,7 +5,7 @@
 #ifndef RPCTUNER_COMWITHDRIVERBASE_H
 #define RPCTUNER_COMWITHDRIVERBASE_H
 
-#include "../../RPC_GLOBAL.h"
+#include <RPC_GLOBAL.h>
 
 class ComWithDriver {
 public:

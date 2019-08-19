@@ -3,7 +3,6 @@
 //
 
 #include "CRpcApp.h"
-#include "CRpcProtocol.h"
 
 #define LOGD(...) LOGTAG("CRpcApp", __VA_ARGS__)
 

@@ -1,16 +1,16 @@
 package com.example.rpctuner;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
     // Used to load the 'native-lib' library on application startup.
     static {
 
-        System.loadLibrary("rpc-lib");
+        System.loadLibrary("RPCJNI");
         // System.loadLibrary("native-lib");
     }
 

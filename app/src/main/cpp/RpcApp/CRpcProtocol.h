@@ -5,7 +5,7 @@
 #ifndef RPCTUNER_CRPCPROTOCOL_H
 #define RPCTUNER_CRPCPROTOCOL_H
 
-#include "../RPC_GLOBAL.h"
+#include <RPC_GLOBAL.h>
 
 class CRpcProtocol {
 public:

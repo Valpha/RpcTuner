@@ -6,7 +6,8 @@
 #define RPCTUNER_CUARTDRIVER_H
 
 #include "ComWithDriver.h"
-#include "UserComConfig.h"
+#include <UserComConfig.h>
+
 #include <sys/ioctl.h>
 #include <sys/types.h>
 #include <sys/stat.h>

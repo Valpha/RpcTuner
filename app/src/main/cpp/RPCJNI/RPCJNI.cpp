@@ -1,6 +1,12 @@
+//
+// Created by Valpha on 2019/8/20.
+//
+
 #include <jni.h>
 #include <string>
-#include "RPC_GLOBAL.h"
+
+#include <RPC_GLOBAL.h>
+
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_example_rpctuner_MainActivity_stringFromJNI(
         JNIEnv *env,
@@ -13,5 +19,6 @@ JNIEXPORT void JNICALL
 Java_com_example_rpctuner_MainActivity_rpcJNI(JNIEnv *env, jobject instance) {
 
     // TODO
+
 
 }

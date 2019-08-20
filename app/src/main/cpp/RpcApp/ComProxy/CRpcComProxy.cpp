@@ -10,12 +10,15 @@ pthread_mutex_t  CRpcComProxy::mutex = PTHREAD_MUTEX_INITIALIZER;
 CRpcComProxy *CRpcComProxy::pInstance = 0;
 
 CRpcComProxy *CRpcComProxy::getInstance(uByte senderType) {
+    LOGD("getInstance: enter");
     if (pInstance == NULL) {
         //double check
         Lock lock(mutex);    //用lock实现线程安全
+        LOGD("getInstance: locked");
         if (pInstance == NULL) {
             switch (senderType) {
                 case 0:
+                    LOGD("getInstance: new CRpcComProxy(new UartDriver)\n");
                     pInstance = new CRpcComProxy(new UartDriver);
                     break;
                 default:
@@ -23,12 +26,14 @@ CRpcComProxy *CRpcComProxy::getInstance(uByte senderType) {
             }
         }
     }
+    LOGD("getInstance: exit");
+
     return pInstance;
 }
 
 
 CRpcComProxy::CRpcComProxy(ComWithDriver *sender) : m_sender(sender) {
-
+    LOGD("new CRpcComProxy Done!\n");
 }
 
 void CRpcComProxy::InitHardware(void) {
@@ -37,7 +42,9 @@ void CRpcComProxy::InitHardware(void) {
 }
 
 RPC_ERRCODE CRpcComProxy::openHardware(void) {
+    LOGD("openHardware: return\n");
     return m_sender->openHardware();
+
 }
 
 void CRpcComProxy::closeHardware(void) {
@@ -46,7 +53,7 @@ void CRpcComProxy::closeHardware(void) {
 }
 
 void CRpcComProxy::writeBytes(uByte *data, uByte length) {
-    LOGD("CRpcComProxy::writeBytes enter\n");
+    LOGD("writeBytes: enter\n");
     m_sender->writeBytes(data, length);
     LOGD("writeBytes: exit\n");
 }

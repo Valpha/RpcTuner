@@ -36,6 +36,7 @@ bool CRpcProtocol::checkCheckSum(uByte *pPpcData, uByte cmdLength) {
 
 RPC_ERRCODE
 CRpcProtocol::makeRpcCommond(uByte modelcode, uWord opcode, uByte *pCmdData, uByte cmdLength) {
+    LOGD("makeRpcCommond: enter\n");
     for (uByte i = 0; i < RPC_CMD_LENGTH; i++) {
         mProtolData[i] = 0;
     }
@@ -57,6 +58,7 @@ CRpcProtocol::makeRpcCommond(uByte modelcode, uWord opcode, uByte *pCmdData, uBy
     }
 
     LOGD("\n");
+    LOGD("makeRpcCommond: exit\n");
 
     return RPC_OK;
 }

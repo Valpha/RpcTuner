@@ -14,6 +14,7 @@ pthread_mutex_t  UartDriver::mutex = PTHREAD_MUTEX_INITIALIZER;
 UartDriver::UartDriver() {
 
     uartfd = -1;
+    LOGD("New UartDriver!\n");
 }
 
 UartDriver::~UartDriver() {
@@ -48,15 +49,15 @@ void UartDriver::writeBytes(uByte *data, uByte length) {
     uByte buff[MaxLength + 4];
     memset(buff, 0, sizeof(buff));
     memcpy(buff, data, length);
-    LOGD("writeBytes: Writing...\n");
-    for (uByte i = 0; i < length; i++) {
-        LOGD("%X, ", data[i]);
-    }
-    LOGD("\n");
     buff[MaxLength] = 0x0D;
     buff[MaxLength + 1] = 0x0A;
     buff[MaxLength + 2] = 0x0D;
     buff[MaxLength + 3] = 0x0A;
+    LOGD("writeBytes: Writing...\n");
+    for (uByte i = 0; i < length + 4; i++) {
+        LOGD("%X, ", data[i]);
+    }
+    LOGD("\n");
     write(uartfd, buff, MaxLength + 4);
     pthread_mutex_unlock(&mutex);
 }

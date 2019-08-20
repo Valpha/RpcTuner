@@ -11,6 +11,9 @@ cmake_minimum_required(VERSION 3.4.1)
 # Gradle automatically packages shared libraries with your APK.
 
 include_directories("include")
+include_directories("RpcApp")
+include_directories("TunerApp")
+#include_directories("/")
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
 # default, you only need to specify the name of the public NDK library
@@ -29,13 +32,16 @@ add_library(rpc-lib SHARED ${RPCAPP})
 target_link_libraries(rpc-lib ${log-lib})
 
 
+
 file(GLOB_RECURSE TUNERAPP "TunerApp/*.cpp")
 add_library(tuner-lib SHARED ${TUNERAPP})
 target_link_libraries(tuner-lib ${log-lib})
 target_link_libraries(tuner-lib rpc-lib)
 
+
 file(GLOB_RECURSE RPCJNI "RPCJNI/RPCJNI.cpp")
-add_library(RPCJNI STATIC ${RPCJNI})
+add_library(RPCJNI SHARED ${RPCJNI})
 target_link_libraries(RPCJNI ${log-lib})
+
 
 target_link_libraries(RPCJNI tuner-lib)

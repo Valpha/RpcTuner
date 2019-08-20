@@ -9,7 +9,7 @@
 #include "../RpcApp/CRpcApp.h"
 
 class CTunerRpcListener : public CRpcListener {
-    virtual void onReceivedInfo(uByte *pInfo, uByte length);
+    void onReceivedInfo(uByte *pInfo, uByte length) override;
 
     virtual void onDataChanged(uByte *pInfo, uByte length) = 0;
 };
@@ -28,11 +28,11 @@ private:
     static CTunerApp *pInstance;
 
 public:
-    RPC_ERRCODE setFrequence(uLongLong frequence);
+    RPC_ERRCODE setFrequency(uLong frequency);
 
-    RPC_ERRCODE seekUp(uLongLong frequence);
+    RPC_ERRCODE seekUp(uLong frequence);
 
-    RPC_ERRCODE seekDown(uLongLong frequence);
+    RPC_ERRCODE seekDown(uLong frequence);
 
     RPC_ERRCODE getInfo(uByte *info, uByte length);
 

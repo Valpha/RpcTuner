@@ -31,44 +31,44 @@ CTunerApp *CTunerApp::getInstance(void) {
     return pInstance;
 }
 
-RPC_ERRCODE CTunerApp::setFrequence(uLongLong frequence) {
-    LOGD("setFrequence: enter\n");
-    if (frequence < 87500 || frequence > 108000) {
+RPC_ERRCODE CTunerApp::setFrequency(uLong frequency) {
+    LOGD("setFrequency: enter\n");
+    if (frequency < 87500 || frequency > 108000) {
         return RPC_PARA_ERROR;
     }
     uByte pCmdData[3] = {0};
-    pCmdData[0] = frequence & 0xFF;
-    pCmdData[1] = (frequence >> 8) & 0xFF;
-    pCmdData[2] = (frequence >> 16) & 0xFF;
+    pCmdData[0] = frequency & 0xFF;
+    pCmdData[1] = (frequency >> 8) & 0xFF;
+    pCmdData[2] = (frequency >> 16) & 0xFF;
 
     CRpcApp::getInstance()->sendCommand(0x01, 0x0001, pCmdData, sizeof(pCmdData));
-    LOGD("setFrequence: exit\n");
+    LOGD("setFrequency: exit\n");
     return RPC_OK;
 }
 
-RPC_ERRCODE CTunerApp::seekUp(uLongLong frequence) {
-    LOGD("setFrequence: enter\n");
-    if (frequence < 87500 || frequence > 108000) {
+RPC_ERRCODE CTunerApp::seekUp(uLong frequency) {
+    LOGD("setFrequency: enter\n");
+    if (frequency < 87500 || frequency > 108000) {
         return RPC_PARA_ERROR;
     }
     uByte pCmdData[3] = {0};
-    pCmdData[0] = frequence & 0xFF;
-    pCmdData[1] = (frequence >> 8) & 0xFF;
-    pCmdData[2] = (frequence >> 16) & 0xFF;
+    pCmdData[0] = frequency & 0xFF;
+    pCmdData[1] = (frequency >> 8) & 0xFF;
+    pCmdData[2] = (frequency >> 16) & 0xFF;
 
     CRpcApp::getInstance()->sendCommand(0x01, 0x0002, pCmdData, sizeof(pCmdData));
     return RPC_OK;
 }
 
-RPC_ERRCODE CTunerApp::seekDown(uLongLong frequence) {
-    LOGD("setFrequence: enter\n");
-    if (frequence < 87500 || frequence > 108000) {
+RPC_ERRCODE CTunerApp::seekDown(uLong frequency) {
+    LOGD("setFrequency: enter\n");
+    if (frequency < 87500 || frequency > 108000) {
         return RPC_PARA_ERROR;
     }
     uByte pCmdData[3] = {0};
-    pCmdData[0] = frequence & 0xFF;
-    pCmdData[1] = (frequence >> 8) & 0xFF;
-    pCmdData[2] = (frequence >> 16) & 0xFF;
+    pCmdData[0] = frequency & 0xFF;
+    pCmdData[1] = (frequency >> 8) & 0xFF;
+    pCmdData[2] = (frequency >> 16) & 0xFF;
     CRpcApp::getInstance()->sendCommand(0x01, 0x0004, pCmdData, sizeof(pCmdData));
     return RPC_OK;
 }
@@ -84,7 +84,13 @@ RPC_ERRCODE CTunerApp::registeTunerRPCLisiner(CTunerRpcListener *listener) {
 
 }
 
+
+pthread_mutex_t  CFMRadioRpcListener::mutex = PTHREAD_MUTEX_INITIALIZER;
+uByte CFMRadioRpcListener::rpcdata[RPC_CMD_LENGTH];
+bool CFMRadioRpcListener::rpcdataokflag = false;
+
 void CTunerRpcListener::onReceivedInfo(uByte *pInfo, uByte length) {
+    LOGD("CTunerRpcListener::onReceivedInfo Called!");
     LOGD("%d\n", length);
     for (int i = 0; i < length; i++) {
         LOGD("%X, ", pInfo[i]);
@@ -102,11 +108,8 @@ void CTunerRpcListener::onReceivedInfo(uByte *pInfo, uByte length) {
     }
 }
 
-pthread_mutex_t  CFMRadioRpcListener::mutex = PTHREAD_MUTEX_INITIALIZER;
-uByte CFMRadioRpcListener::rpcdata[RPC_CMD_LENGTH];
-bool CFMRadioRpcListener::rpcdataokflag = false;
-
 void CFMRadioRpcListener::onDataChanged(uByte *pInfo, uByte length) {
+    LOGD("CFMRadioRpcListener::onDataChanged Called!");
     if (CFMRadioRpcListener::rpcdataokflag == false) {
         for (uByte i = 0; i < length; i++) {
             LOGD("%X ", pInfo[i]);

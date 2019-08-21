@@ -13,7 +13,7 @@ CRpcApp *CRpcApp::pInstance = NULL;
 RPC_ERRCODE CRpcApp::rpcreadyFlag = RPC_COM_ERROR;
 
 
-CRpcApp *CRpcApp::getInstance(void) {
+CRpcApp *CRpcApp::getInstance() {
     LOGD("getInstance: enter\n");
     if (pInstance == NULL) {
         //double check
@@ -71,7 +71,7 @@ RPC_ERRCODE CRpcApp::registerRpcLisener(CRpcListener *lisener) {
 }
 
 RPC_ERRCODE CRpcApp::unregisterAllRpcLisener() {
-    for (vector<CRpcListener *>::iterator it = listenerList.begin(); it != listenerList.end();) {
+    for (auto it = listenerList.begin(); it != listenerList.end();) {
         listenerList.erase(it);
         ++it;
     }
@@ -79,11 +79,15 @@ RPC_ERRCODE CRpcApp::unregisterAllRpcLisener() {
 }
 
 RPC_ERRCODE CRpcApp::unregisterRpcLisener(CRpcListener *lisener) {
-    for (vector<CRpcListener *>::iterator it = listenerList.begin(); it != listenerList.end();) {
-        listenerList.erase(it);
-        ++it;
+    for (auto it = listenerList.begin(); it != listenerList.end();) {
+        if (*it == lisener) {
+            it = listenerList.erase(it);
+            return RPC_OK;
+        } else {
+            ++it;
+        }
     }
-    return RPC_OK;
+    return RPC_PARA_ERROR;
 }
 
 RPC_ERRCODE CRpcApp::getInfo(uByte *info, uByte length) {
@@ -94,7 +98,7 @@ RPC_ERRCODE CRpcApp::getInfo(uByte *info, uByte length) {
 
 void CRpcApp::rpcGetDataCallback(uByte *data, uByte length) {
     LOGD("rpcGetDataCallback: enter");
-    for (vector<CRpcListener *>::iterator it = pInstance->listenerList.begin();
+    for (auto it = pInstance->listenerList.begin();
          it != pInstance->listenerList.end();) {
         (*it)->onReceivedInfo(data, length);
         ++it;

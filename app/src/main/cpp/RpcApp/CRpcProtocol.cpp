@@ -27,11 +27,7 @@ bool CRpcProtocol::checkCheckSum(uByte *pPpcData, uByte cmdLength) {
     }
     uWord realsum = mProtolData[15] + (mProtolData[14] << 8);
     uWord checksum = pPpcData[15] + (pPpcData[14] << 8);
-    if (realsum == checksum) {
-        return true;
-    } else {
-        return false;
-    }
+    return realsum == checksum;
 }
 
 RPC_ERRCODE

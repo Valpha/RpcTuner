@@ -38,6 +38,10 @@ public:
 
     RPC_ERRCODE registeTunerRPCLisiner(CTunerRpcListener *listener);
 
+    RPC_ERRCODE unregisteTunerRPCLisiner(CTunerRpcListener *listener);
+
+
+
 public:
     CTunerRpcListener *tunerRpcListener;
 };
@@ -51,8 +55,8 @@ public:
     virtual ~CFMRadioRpcListener();
 
     static pthread_mutex_t mutex;
-    static uByte rpcdata[RPC_CMD_LENGTH];
-    static bool rpcdataokflag;
+    uByte rpcData[RPC_CMD_LENGTH];
+    bool rpcDataOkFlag;
 };
 
 #endif //RPCTUNER_CTUNERAPP_H

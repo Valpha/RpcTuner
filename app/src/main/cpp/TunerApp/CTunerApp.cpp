@@ -81,13 +81,15 @@ RPC_ERRCODE CTunerApp::getInfo(uByte *info, uByte length) {
 RPC_ERRCODE CTunerApp::registeTunerRPCLisiner(CTunerRpcListener *listener) {
     tunerRpcListener = listener;
     return CRpcApp::getInstance()->registerRpcLisener(listener);
+}
 
+RPC_ERRCODE CTunerApp::unregisteTunerRPCLisiner(CTunerRpcListener *listener) {
+    tunerRpcListener = listener;
+    return CRpcApp::getInstance()->unregisterRpcLisener(listener);
 }
 
 
 pthread_mutex_t  CFMRadioRpcListener::mutex = PTHREAD_MUTEX_INITIALIZER;
-uByte CFMRadioRpcListener::rpcdata[RPC_CMD_LENGTH];
-bool CFMRadioRpcListener::rpcdataokflag = false;
 
 void CTunerRpcListener::onReceivedInfo(uByte *pInfo, uByte length) {
     LOGD("CTunerRpcListener::onReceivedInfo Called!");
@@ -110,17 +112,15 @@ void CTunerRpcListener::onReceivedInfo(uByte *pInfo, uByte length) {
 
 void CFMRadioRpcListener::onDataChanged(uByte *pInfo, uByte length) {
     LOGD("CFMRadioRpcListener::onDataChanged Called!");
-    if (CFMRadioRpcListener::rpcdataokflag == false) {
+    if (!CFMRadioRpcListener::rpcDataOkFlag) {
         for (uByte i = 0; i < length; i++) {
             LOGD("%X ", pInfo[i]);
-            CFMRadioRpcListener::rpcdata[i] = pInfo[i];
+            CFMRadioRpcListener::rpcData[i] = pInfo[i];
         }
-        CFMRadioRpcListener::rpcdataokflag = true;
+        CFMRadioRpcListener::rpcDataOkFlag = true;
     }
 }
 
-CFMRadioRpcListener::CFMRadioRpcListener() {}
+CFMRadioRpcListener::CFMRadioRpcListener() = default;
 
-CFMRadioRpcListener::~CFMRadioRpcListener() {
-
-}
+CFMRadioRpcListener::~CFMRadioRpcListener() = default;

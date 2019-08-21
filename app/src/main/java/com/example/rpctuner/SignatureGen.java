@@ -3,20 +3,23 @@ package com.example.rpctuner;
 
 import java.util.HashMap;
 
-public class SignatureGen {
+/**
+ * @author Valpha
+ */
+class SignatureGen {
 
-    public static final HashMap<String, String> Primitives = new HashMap<String, String>();
+    public static final HashMap<String, String> PRIMITIVES = new HashMap<String, String>();
 
     static {
-        Primitives.put(Void.class.getName(), "V");
-        Primitives.put(Boolean.class.getName(), "Z");
-        Primitives.put(Byte.class.getName(), "B");
-        Primitives.put(Character.class.getName(), "C");
-        Primitives.put(Short.class.getName(), "S");
-        Primitives.put(Integer.class.getName(), "I");
-        Primitives.put(Long.class.getName(), "J");
-        Primitives.put(Float.class.getName(), "F");
-        Primitives.put(Double.class.getName(), "D");
+        PRIMITIVES.put(Void.class.getName(), "V");
+        PRIMITIVES.put(Boolean.class.getName(), "Z");
+        PRIMITIVES.put(Byte.class.getName(), "B");
+        PRIMITIVES.put(Character.class.getName(), "C");
+        PRIMITIVES.put(Short.class.getName(), "S");
+        PRIMITIVES.put(Integer.class.getName(), "I");
+        PRIMITIVES.put(Long.class.getName(), "J");
+        PRIMITIVES.put(Float.class.getName(), "F");
+        PRIMITIVES.put(Double.class.getName(), "D");
     }
 
     public static String getSignature(Class ret, Class... params) {
@@ -33,7 +36,7 @@ public class SignatureGen {
     protected static String getSignature(Class param) {
 
         StringBuilder builder = new StringBuilder();
-        String name = "";
+        String name;
         if (param.isArray()) {
             name = param.getComponentType().getName();
             builder.append("[");
@@ -41,8 +44,8 @@ public class SignatureGen {
             name = param.getName();
         }
 
-        if (Primitives.containsKey(name)) {
-            builder.append(Primitives.get(name));
+        if (PRIMITIVES.containsKey(name)) {
+            builder.append(PRIMITIVES.get(name));
         } else {
             builder.append("L" + name.replace(".", "/") + ";");
         }

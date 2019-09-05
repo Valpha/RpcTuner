@@ -51,8 +51,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         // Example of a call to a native method
-        tv = findViewById(R.id.sample_text);
-        etFrequency = findViewById(R.id.et_freq);
+        // tv = findViewById(R.id.sample_text);
+        // etFrequency = findViewById(R.id.et_freq);
     }
 
     public void setFrequency(View view) {
